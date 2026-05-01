@@ -1,0 +1,451 @@
+openapi: 3.0.3
+info:
+  title: Lista de Tarefas API
+  description: API REST para cadastro de usuarios, autenticacao via JWT e gerenciamento de tarefas.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Ambiente local
+
+tags:
+  - name: Usuarios
+    description: Cadastro de usuarios
+  - name: Autenticacao
+    description: Login e emissao de token JWT
+  - name: Tarefas
+    description: Gerenciamento de tarefas do usuario autenticado
+
+paths:
+  /usuarios:
+    post:
+      tags:
+        - Usuarios
+      summary: Cadastrar usuario
+      description: Cria um novo usuario informando nome, email e senha.
+      operationId: cadastrarUsuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioCadastroRequest'
+            example:
+              nome: Maria Silva
+              email: maria@email.com
+              senha: '123456'
+      responses:
+        '201':
+          description: Usuario cadastrado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+              example:
+                id: 1
+                nome: Maria Silva
+                email: maria@email.com
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Email ja cadastrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              example:
+                mensagem: Email ja cadastrado.
+
+  /login:
+    post:
+      tags:
+        - Autenticacao
+      summary: Autenticar usuario
+      description: Autentica o usuario por email e senha e retorna um token JWT.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: maria@email.com
+              senha: '123456'
+      responses:
+        '200':
+          description: Login realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: jwt_token_gerado_pela_api
+                tipo: Bearer
+                expiraEm: 86400
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /tarefas:
+    post:
+      tags:
+        - Tarefas
+      summary: Criar tarefa
+      description: Cria uma tarefa para o usuario autenticado. O status inicial e definido automaticamente como "Em aberto".
+      operationId: criarTarefa
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarefaCriacaoRequest'
+            example:
+              descricao: Estudar Node.js
+              detalhes: Revisar conceitos de API REST
+              data: '2026-05-01'
+      responses:
+        '201':
+          description: Tarefa criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags:
+        - Tarefas
+      summary: Listar tarefas
+      description: Lista as tarefas do usuario autenticado. Permite filtrar por status.
+      operationId: listarTarefas
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          description: Filtra tarefas por status.
+          schema:
+            $ref: '#/components/schemas/StatusTarefa'
+          examples:
+            emAberto:
+              summary: Tarefas em aberto
+              value: Em aberto
+            concluido:
+              summary: Tarefas concluidas
+              value: Concluído
+      responses:
+        '200':
+          description: Lista de tarefas retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarefa'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /tarefas/{id}:
+    get:
+      tags:
+        - Tarefas
+      summary: Buscar tarefa por ID
+      description: Retorna os detalhes de uma tarefa do usuario autenticado.
+      operationId: buscarTarefaPorId
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TarefaId'
+      responses:
+        '200':
+          description: Tarefa encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - Tarefas
+      summary: Editar tarefa
+      description: Atualiza descricao, detalhes e data de uma tarefa do usuario autenticado.
+      operationId: editarTarefa
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TarefaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarefaAtualizacaoRequest'
+            example:
+              descricao: Estudar API REST
+              detalhes: Revisar endpoints, status HTTP e autenticacao
+              data: '2026-05-02'
+      responses:
+        '200':
+          description: Tarefa atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - Tarefas
+      summary: Excluir tarefa
+      description: Remove uma tarefa do usuario autenticado.
+      operationId: excluirTarefa
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TarefaId'
+      responses:
+        '204':
+          description: Tarefa excluida com sucesso.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /tarefas/{id}/status:
+    patch:
+      tags:
+        - Tarefas
+      summary: Alterar status da tarefa
+      description: Atualiza o status da tarefa para "Em aberto" ou "Concluído".
+      operationId: alterarStatusTarefa
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TarefaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarefaStatusRequest'
+            example:
+              status: Concluído
+      responses:
+        '200':
+          description: Status atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    TarefaId:
+      name: id
+      in: path
+      required: true
+      description: Identificador da tarefa.
+      schema:
+        type: integer
+        format: int64
+        example: 1
+
+  responses:
+    BadRequest:
+      description: Requisicao invalida.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Erro'
+          example:
+            mensagem: Dados invalidos.
+    Unauthorized:
+      description: Token JWT ausente, invalido ou expirado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Erro'
+          example:
+            mensagem: Nao autorizado.
+    NotFound:
+      description: Recurso nao encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Erro'
+          example:
+            mensagem: Tarefa nao encontrada.
+
+  schemas:
+    UsuarioCadastroRequest:
+      type: object
+      required:
+        - nome
+        - email
+        - senha
+      properties:
+        nome:
+          type: string
+          minLength: 2
+          example: Maria Silva
+        email:
+          type: string
+          format: email
+          example: maria@email.com
+        senha:
+          type: string
+          format: password
+          minLength: 6
+          example: '123456'
+
+    UsuarioResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nome:
+          type: string
+          example: Maria Silva
+        email:
+          type: string
+          format: email
+          example: maria@email.com
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - senha
+      properties:
+        email:
+          type: string
+          format: email
+          example: maria@email.com
+        senha:
+          type: string
+          format: password
+          example: '123456'
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT assinado pela API.
+          example: jwt_token_gerado_pela_api
+        tipo:
+          type: string
+          example: Bearer
+        expiraEm:
+          type: integer
+          description: Tempo de expiracao do token em segundos.
+          example: 86400
+
+    TarefaCriacaoRequest:
+      type: object
+      required:
+        - descricao
+        - detalhes
+        - data
+      properties:
+        descricao:
+          type: string
+          example: Estudar Node.js
+        detalhes:
+          type: string
+          example: Revisar conceitos de API REST
+        data:
+          type: string
+          format: date
+          example: '2026-05-01'
+
+    TarefaAtualizacaoRequest:
+      type: object
+      required:
+        - descricao
+        - detalhes
+        - data
+      properties:
+        descricao:
+          type: string
+          example: Estudar API REST
+        detalhes:
+          type: string
+          example: Revisar endpoints, status HTTP e autenticacao
+        data:
+          type: string
+          format: date
+          example: '2026-05-02'
+
+    TarefaStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusTarefa'
+
+    StatusTarefa:
+      type: string
+      enum:
+        - Em aberto
+        - Concluído
+      example: Em aberto
+
+    Tarefa:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        descricao:
+          type: string
+          example: Estudar Node.js
+        detalhes:
+          type: string
+          example: Revisar conceitos de API REST
+        data:
+          type: string
+          format: date
+          example: '2026-05-01'
+        status:
+          $ref: '#/components/schemas/StatusTarefa'
+        usuarioId:
+          type: integer
+          format: int64
+          example: 1
+
+    Erro:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Erro ao processar a requisicao.

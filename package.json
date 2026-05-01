@@ -1,0 +1,14 @@
+{
+  "name": "lista-de-tarefas-api",
+  "version": "1.0.0",
+  "description": "API REST de lista de tarefas com Express e banco em memoria.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {}
+}
