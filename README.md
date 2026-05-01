@@ -15,6 +15,18 @@ No Windows PowerShell, caso a politica de execucao bloqueie o `npm`, use:
 npm.cmd start
 ```
 
+## Testes automatizados
+
+```bash
+npm test
+```
+
+No Windows PowerShell, caso a politica de execucao bloqueie o `npm`, use:
+
+```bash
+npm.cmd test
+```
+
 ## URLs
 
 - API: `http://localhost:3000/api`
@@ -28,3 +40,19 @@ npm.cmd start
 3. Copie o token retornado.
 4. No Swagger UI, clique em `Authorize` e informe o token como Bearer.
 5. Use os endpoints de tarefas autenticados.
+
+## Estrutura do projeto
+
+```text
+src/
+  app.js                 # Configuracao principal do Express
+  server.js              # Inicializacao do servidor
+  config/                # Constantes e configuracoes da aplicacao
+  database/              # Banco em memoria e utilitarios de teste
+  middlewares/           # Middlewares compartilhados
+  routes/                # Rotas HTTP agrupadas por dominio
+  services/              # Regras auxiliares e servicos de apoio
+  utils/                 # Funcoes utilitarias
+  validators/            # Validacoes de entrada
+test/                    # Testes automatizados com Mocha, Chai e Supertest
+```
