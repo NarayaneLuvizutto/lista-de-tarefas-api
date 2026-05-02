@@ -9,7 +9,7 @@ describe('Usuarios', () => {
 
   describe('POST /usuarios', () => {
     beforeEach(() => {
-    resetDb();
+      resetDb();
     });
 
     it('Deve retornar sucesso com 201 quando o usuario for cadastrado', async () => {
@@ -42,8 +42,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Nome deve ter pelo menos 2 caracteres."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado com Nome maior que 300 caracteres', async () => {
@@ -59,8 +57,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Nome não pode conter mais que 300 caracteres."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado sem informar Email', async () => {
@@ -76,8 +72,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Email invalido."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado com Email com formato inválido', async () => {
@@ -93,8 +87,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Email invalido."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado com Email com mais de 300 caracteres', async () => {
@@ -110,8 +102,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Email não pode conter mais que 300 caracteres."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado sem informar Senha', async () => {
@@ -127,8 +117,6 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Senha deve ter pelo menos 6 caracteres."
       });
-
-      console.log(resposta.body)
     });
 
     it('Deve retornar falha com 400 quando o usuario for cadastrado com a Senha com mais de 100 caracteres', async () => {
@@ -144,15 +132,13 @@ describe('Usuarios', () => {
       expect(resposta.body).to.include({
         "mensagem": "Senha não pode conter mais que 100 caracteres."
       });
-
-      console.log(resposta.body)
     });
   });
 
 
   describe('POST /usuarios duplicados', () => {
     beforeEach(() => {
-    resetDb();
+      resetDb();
     });
 
     it('Deve retornar falha com 409 quando o usuario for cadastrado com Email já existente na base', async () => {
@@ -174,10 +160,8 @@ describe('Usuarios', () => {
       expect(segundaResposta.body).to.include({
         "mensagem": "Email ja cadastrado."
       });
-
-      console.log(segundaResposta.body)
     });
   });
 
-  
+
 });
