@@ -8,3 +8,9 @@ pnpm-debug.log*
 coverage/
 dist/
 build/
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/
+frontend/cypress/downloads/
+frontend/cypress/screenshots/
+frontend/cypress/videos/

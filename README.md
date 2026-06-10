@@ -32,6 +32,7 @@ npm.cmd test
 - API: `http://localhost:3000/api`
 - Swagger UI: `http://localhost:3000/docs`
 - Arquivo OpenAPI servido pela API: `http://localhost:3000/docs/swagger.yaml`
+- Front-end: `http://127.0.0.1:5173`
 
 ## Fluxo basico
 
@@ -44,6 +45,7 @@ npm.cmd test
 ## Estrutura do projeto
 
 ```text
+frontend/                # Aplicacao React/Vite que consome a API
 src/
   app.js                 # Configuracao principal do Express
   server.js              # Inicializacao do servidor
