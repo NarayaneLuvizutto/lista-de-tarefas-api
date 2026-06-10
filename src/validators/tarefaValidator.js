@@ -3,8 +3,16 @@ function validarTarefa({ descricao, detalhes, data }) {
     return 'Descricao e obrigatoria.';
   }
 
+  if (String(descricao).trim().length > 300) {
+    return 'Descricao deve ter no maximo 300 caracteres.';
+  }
+
   if (!detalhes || String(detalhes).trim().length === 0) {
     return 'Detalhes sao obrigatorios.';
+  }
+
+  if (String(detalhes).trim().length > 500) {
+    return 'Detalhes devem ter no maximo 500 caracteres.';
   }
 
   if (!data || !dataValida(data)) {
