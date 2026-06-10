@@ -1,6 +1,52 @@
-# Lista de Tarefas API
+# Lista de Tarefas
 
-API REST em JavaScript com Express e armazenamento em memoria, implementando o contrato OpenAPI em `docs/swagger.yaml`.
+## Sobre o Projeto
+
+O **lista-de-tarefas-api** é uma aplicação de gerenciamento de tarefas composta por uma **API REST** desenvolvida em **JavaScript com Express** e uma interface web desenvolvida em **React**, **Vite** e **TypeScript**. Atualmente, os dados são armazenados em memória, tornando o projeto simples e ideal para fins de estudo e experimentação.
+
+O projeto base foi criado com o auxílio da inteligência artificial **Codex**, servindo como ambiente de aprendizado para explorar o uso de IA tanto no desenvolvimento quanto na automação de testes.
+
+## Objetivo
+
+O principal objetivo deste projeto é disponibilizar uma aplicação de referência para estudos e implementação de **testes automatizados de back-end e front-end utilizando Inteligência Artificial**, permitindo avaliar diferentes abordagens, ferramentas e estratégias de automação assistidas por IA.
+
+## Tecnologias Utilizadas
+
+### Aplicação
+
+* JavaScript
+* Express
+* React
+* Vite
+* TypeScript
+
+### Automação de Testes da API
+
+* Mocha
+* Chai
+* Supertest
+
+### Automação de Testes do Front-end
+
+* Cypress
+
+## Finalidade Educacional
+
+Este projeto foi desenvolvido com foco em aprendizado e experimentação, sendo utilizado para estudos relacionados a:
+
+* Desenvolvimento assistido por IA com Codex;
+* Automação de testes de APIs REST;
+* Automação de testes de aplicações web;
+* Boas práticas de qualidade de software;
+* Avaliação do potencial da IA na geração e manutenção de testes automatizados.
+
+## Mais informações sobre a regra de negócio: 
+Para entender como que funciona a aplicação de Lista de Tarefas, veja a documentação em: https://github.com/NarayaneLuvizutto/lista-de-tarefas-api/wiki
+
+
+## Informações técnicas: 
+
+Contrato da API REST disponível em `docs/swagger.yaml`.
 
 ## Como executar
 
